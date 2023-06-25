@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:instagram_clone/resources/auth_methods.dart';
@@ -26,8 +27,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController _usernameController = TextEditingController();
 
   Uint8List? _image;
-
   bool _isLoading = false;
+
+  @override
+  void initState() {
+    super.initState();
+    setDefaultImage();
+  }
 
   @override
   void dispose() {
@@ -36,6 +42,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
     _passwordController.dispose();
     _bioController.dispose();
     _usernameController.dispose();
+  }
+
+  void setDefaultImage() async {
+    _image = (await rootBundle.load('assets/images/default_profilePic.png'))
+        .buffer
+        .asUint8List();
   }
 
   void selectImage() async {
@@ -74,7 +86,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
           },
         ),
       );
-      
     }
   }
 
@@ -120,8 +131,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                   )
                                 : const CircleAvatar(
                                     radius: 64,
-                                    backgroundImage: NetworkImage(
-                                        'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/Windows_10_Default_Profile_Picture.svg/768px-Windows_10_Default_Profile_Picture.svg.png'),
+                                    backgroundImage: AssetImage(
+                                        'assets/images/default_profilePic.png'),
                                   ),
                             Positioned(
                               bottom: -10,
